@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Starter Lab: From Plain HTML to Styled Page</title>
+  <style>
+    :root {
+      --primary: #005580;
+      --text: #222222;
+      --muted: #666666;
+      --bg: #f7f7f7;
+      --panel: #ffffff;
+      --border: #d9d9d9;
+      --light: #f2f2f2;
+      --focus: #7a2e8e;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    header.site-header {
+      background: var(--primary);
+      color: white;
+      padding: 1.25rem;
+    }
+
+    header.site-header h1 {
+      margin: 0 0 .35rem;
+      font-size: 1.7rem;
+    }
+
+    header.site-header p { margin: 0; }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    .intro,
+    .panel,
+    .practice {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .intro h2,
+    .panel h2,
+    .practice h2 { margin-top: 0; }
+
+    /* ---------- Five big ideas ---------- */
+    .idea-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: .5rem;
+    }
+
+    .idea {
+      width: 100%;
+      min-height: 44px;
+      text-align: left;
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--primary);
+      border-radius: 8px;
+      background: #f8fbfc;
+      padding: .65rem .8rem;
+      cursor: pointer;
+      font: inherit;
+      color: var(--text);
+    }
+
+    .idea:hover { background: #eef7fb; }
+
+    .idea-term {
+      display: block;
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .idea-def { color: #444; }
+
+    .hint {
+      color: var(--muted);
+      font-size: .9rem;
+      margin: .6rem 0 0;
+    }
+
+    /* ---------- Steps ---------- */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: .5rem;
+      margin-bottom: 1rem;
+    }
+
+    button,
+    select { font: inherit; }
+
+    .step-btn,
+    #resetBtn {
+      min-height: 44px;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 8px;
+      padding: .65rem .8rem;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    .step-btn:hover,
+    #resetBtn:hover { background: #f3f3f3; }
+
+    .step-btn[aria-current="step"] {
+      border: 2px solid var(--primary);
+      background: #eef7fb;
+      font-weight: 700;
+    }
+
+    .step-btn:focus-visible,
+    #resetBtn:focus-visible,
+    .idea:focus-visible,
+    select:focus-visible,
+    pre:focus-visible,
+    iframe:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* ---------- Lab ---------- */
+    .lab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+      margin-bottom: .75rem;
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .file-label {
+      color: var(--muted);
+      font-size: .9rem;
+      font-family: Consolas, Monaco, monospace;
+    }
+
+    pre {
+      position: relative;
+      margin: 0;
+      background: #111;
+      color: #b5b5b5;
+      border-radius: 8px;
+      padding: 1rem;
+      overflow: auto;
+      min-height: 320px;
+      max-height: 480px;
+      white-space: pre-wrap;
+      font: 0.92rem/1.5 Consolas, Monaco, monospace;
+    }
+
+    pre mark {
+      display: block;
+      color: #f8f8f2;
+      background: #1f3b1c;
+      border-left: 4px solid #8fd18a;
+      margin: 0 -1rem;
+      padding: 0 1rem 0 calc(1rem - 4px);
+    }
+
+    pre mark.experiment {
+      background: #3a2c0c;
+      border-left-color: #e3b341;
+    }
+
+    .code-legend {
+      color: var(--muted);
+      font-size: .88rem;
+      margin: .5rem 0 0;
+    }
+
+    .explain {
+      border-left: 4px solid var(--primary);
+      background: #f8fbfc;
+      padding: .85rem 1rem;
+      margin-top: .8rem;
+    }
+
+    .explain strong { color: var(--primary); }
+
+    .browser-shell {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: white;
+    }
+
+    .browser-bar {
+      background: #ececec;
+      padding: .55rem .75rem;
+      font-size: .85rem;
+      color: #555;
+      border-bottom: 1px solid var(--border);
+    }
+
+    #previewFrame {
+      display: block;
+      width: 100%;
+      height: 460px;
+      border: 0;
+      background: white;
+    }
+
+    /* ---------- Practice ---------- */
+    fieldset {
+      border: 0;
+      margin: 0;
+      padding: 0;
+      min-width: 0;
+    }
+
+    fieldset:disabled label { color: #767676; }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .75rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+    }
+
+    select {
+      width: 100%;
+      min-height: 44px;
+      margin-top: .35rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: white;
+      color: var(--text);
+      padding: .55rem .6rem;
+    }
+
+    .status {
+      margin: .8rem 0 0;
+      color: var(--muted);
+    }
+
+    .contrast-result {
+      margin: .8rem 0 0;
+      padding: .6rem .8rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      flex-wrap: wrap;
+    }
+
+    .swatch {
+      padding: .25rem .6rem;
+      border-radius: 6px;
+      background: #f2f2f2;
+      border: 1px solid var(--border);
+      font-size: .9rem;
+    }
+
+    .verdict { font-weight: 700; }
+    .verdict.pass { color: #1b6e2a; }
+    .verdict.fail { color: #a4261d; }
+
+    .tip {
+      background: #fff8e7;
+      border: 1px solid #ead7a4;
+      border-radius: 8px;
+      padding: .8rem;
+      margin-top: .8rem;
+    }
+
+    footer.page-footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1rem 1.25rem;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    @media (max-width: 900px) {
+      .controls { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 800px) {
+      .lab-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 430px) {
+      .controls { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <h1>CSS Starter Lab</h1>
+    <p>From plain HTML to a styled, accessible, responsive webpage</p>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>How to use this lab</h2>
+      <p>Click each step in order. The preview runs exactly the code you see, so what you read is what the browser does. The goal is not to memorize CSS. The goal is to see the pattern: <strong>select something → add a property → give it a value → save → refresh → observe.</strong></p>
+      <button id="resetBtn" type="button">Reset Lab</button>
+    </section>
+
+    <section class="panel" aria-labelledby="bigIdeasTitle">
+      <h2 id="bigIdeasTitle">Five Big Ideas</h2>
+      <ul class="idea-list">
+        <li><button type="button" class="idea" data-step="2"><span class="idea-term">Variables</span><span class="idea-def">= name things</span></button></li>
+        <li><button type="button" class="idea" data-step="4"><span class="idea-term">Flexbox</span><span class="idea-def">= arrange things</span></button></li>
+        <li><button type="button" class="idea" data-step="1"><span class="idea-term">rem</span><span class="idea-def">= size text</span></button></li>
+        <li><button type="button" class="idea" data-step="5"><span class="idea-term">Focus</span><span class="idea-def">= show where the keyboard is</span></button></li>
+        <li><button type="button" class="idea" data-step="6"><span class="idea-term">Contrast</span><span class="idea-def">= make things easy to see</span></button></li>
+      </ul>
+      <p class="hint">Select an idea to jump to the step that teaches it.</p>
+    </section>
+
+    <nav class="steps" aria-label="CSS lesson steps">
+      <button type="button" class="step-btn" data-step="0">1. Connect CSS</button>
+      <button type="button" class="step-btn" data-step="1">2. Typography</button>
+      <button type="button" class="step-btn" data-step="2">3. Variables &amp; Color</button>
+      <button type="button" class="step-btn" data-step="3">4. Spacing</button>
+      <button type="button" class="step-btn" data-step="4">5. Flexbox</button>
+      <button type="button" class="step-btn" data-step="5">6. Focus</button>
+      <button type="button" class="step-btn" data-step="6">7. Contrast</button>
+    </nav>
+
+    <section class="lab-grid" aria-label="Lab workspace">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Code</h2>
+          <span id="codeLabel" class="file-label">index.html</span>
+        </div>
+        <pre id="codeBox" tabindex="0" aria-label="Code for this step"></pre>
+        <p id="codeLegend" class="code-legend"></p>
+        <div id="explain" class="explain" aria-live="polite"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Browser Preview</h2>
+          <span class="file-label">Save → Refresh → Observe</span>
+        </div>
+        <div class="browser-shell">
+          <div class="browser-bar">index.html</div>
+          <iframe id="previewFrame" title="Webpage preview: Container Gardening Workshop"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <section class="practice" aria-labelledby="practiceTitle">
+      <h2 id="practiceTitle">Try It Yourself</h2>
+      <p id="practiceHint">These controls unlock at Step 7. Each one writes real CSS, which appears in the code panel so you can see what changed.</p>
+
+      <fieldset id="practiceSet" disabled>
+        <legend class="hint" style="margin:0 0 .5rem">Experiment controls</legend>
+        <div class="controls">
+          <label>
+            Spacing (--space variable)
+            <select id="spacingSelect">
+              <option value="0.5rem">Small (0.5rem)</option>
+              <option value="1rem" selected>Medium (1rem)</option>
+              <option value="2rem">Large (2rem)</option>
+            </select>
+          </label>
+
+          <label>
+            Root text size (rem)
+            <select id="fontSelect">
+              <option value="87.5%">Smaller (1rem = 14px)</option>
+              <option value="100%" selected>Default (1rem = 16px)</option>
+              <option value="125%">Larger (1rem = 20px)</option>
+            </select>
+          </label>
+
+          <label>
+            Layout
+            <select id="layoutSelect">
+              <option value="flex" selected>Flexbox</option>
+              <option value="block">Stacked</option>
+            </select>
+          </label>
+
+          <label>
+            Small text color (contrast)
+            <select id="mutedSelect">
+              <option value="#aaaaaa">Light gray (#aaaaaa)</option>
+              <option value="#767676">Medium gray (#767676)</option>
+              <option value="#555555" selected>Dark gray (#555555)</option>
+            </select>
+          </label>
+        </div>
+      </fieldset>
+
+      <div id="contrastResult" class="contrast-result" hidden>
+        <span id="contrastSwatch" class="swatch">Sample small text</span>
+        <span>Contrast on the card background: <strong id="contrastRatio"></strong></span>
+        <span id="contrastVerdict" class="verdict"></span>
+      </div>
+
+      <p id="status" class="status" aria-live="polite"></p>
+
+      <div class="tip">
+        <strong>Remember:</strong> CSS changes presentation. HTML still gives the page its meaning and structure.
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    ETEC 52103 — Media and Web Design · Lesson 5: CSS &amp; Accessible Layout
+  </footer>
+
+  <script>
+    /* The webpage students are styling. The same markup is shown in Step 1
+       and rendered in the preview, so class names always match the CSS. */
+    const PAGE_BODY =
+`<header>
+  <h1>Container Gardening Workshop</h1>
+  <p>Learn how to grow plants in small spaces.</p>
+  <a href="#register">Register now</a>
+</header>
+
+<main>
+  <section class="card-container">
+    <article class="card">
+      <h2>What you will learn</h2>
+      <p>Choose containers, soil, and plants for a successful small garden.</p>
+      <p class="meta">Saturday, 10 a.m. · Room B</p>
+    </article>
+
+    <article class="card">
+      <h2>Who should attend</h2>
+      <p>Beginning gardeners and anyone with limited outdoor space.</p>
+      <p class="meta">Free · No experience needed</p>
+    </article>
+  </section>
+</main>
+
+<footer>
+  <p>Public Library Learning Series · <a href="#events">More events</a></p>
+</footer>`;
+
+    const INDEX_HTML =
+`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+  <title>My Web Page</title>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+` + PAGE_BODY.split('\n').map(line => line ? '  ' + line : line).join('\n') + `
+</body>
+</html>`;
+
+    const CARD_BG = '#f2f2f2';
+
+    const steps = [
+      {
+        css: '',
+        text: '<strong>Connect CSS.</strong> Create a file named styles.css in the same folder as index.html, then add the &lt;link&gt; inside &lt;head&gt;. The href must match the filename exactly. Look at the class names in the body (card-container, card, meta), because the CSS in later steps selects them. The preview shows browser defaults for now. Nothing is styled yet, and that is expected.'
+      },
+      {
+        css:
+`body {
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.25rem;
+}`,
+        text: '<strong>rem = size text.</strong> 1rem equals the root font size, which is usually 16px unless the reader has changed their browser setting. Text sized in rem grows when a reader asks for bigger text, and px does not. line-height adds comfortable space between lines.'
+      },
+      {
+        css:
+`:root {
+  --primary-color: #005580;
+  --text-color: #222222;
+  --background-color: #ffffff;
+  --light-color: #f2f2f2;
+}
+
+body {
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
+header {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+header a {
+  color: white;
+}
+
+.card,
+footer {
+  background-color: var(--light-color);
+}`,
+        text: '<strong>Variables = name things.</strong> Custom properties in :root give a value a reusable name. You write var(--primary-color) wherever you need that color. To update every rule that uses it, change the value once in :root.'
+      },
+      {
+        css:
+`:root {
+  --space: 1rem;
+}
+
+body {
+  margin: 0;
+}
+
+header,
+footer {
+  padding: var(--space);
+}
+
+main {
+  padding: 2rem;
+}
+
+.card {
+  padding: var(--space);
+  margin-bottom: var(--space);
+}
+
+h1,
+h2 {
+  margin-top: 0;
+}`,
+        text: '<strong>Padding</strong> is space inside an element, and <strong>margin</strong> is space outside it. --space is another variable: one name for the page\'s basic spacing unit. body { margin: 0 } removes the gap the browser adds around the page by default.'
+      },
+      {
+        css:
+`.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space);
+}
+
+.card {
+  flex: 1 1 180px;
+  margin-bottom: 0;
+}`,
+        text: '<strong>Flexbox = arrange things.</strong> display: flex goes on the parent (.card-container), and its children line up side by side. gap separates the cards, and flex-wrap lets them move to a new line on narrow screens. flex: 1 1 180px lets each card grow or shrink from a 180px starting width. Narrow your browser window to watch them wrap.'
+      },
+      {
+        css:
+`:root {
+  --focus-color: #7a2e8e;
+}
+
+a:focus-visible {
+  outline: 3px solid var(--focus-color);
+  outline-offset: 3px;
+}
+
+header a:focus-visible {
+  outline-color: white;
+}`,
+        text: '<strong>Focus = show where the keyboard is.</strong> People who use a keyboard press Tab to move from link to link. :focus-visible styles whatever currently has keyboard focus. Try it: press Tab until focus moves into the preview. On the dark blue header, the outline switches to white so it stays visible. Never remove an outline without replacing it.'
+      },
+      {
+        css:
+`:root {
+  --muted-color: #555555;
+}
+
+.meta,
+footer {
+  color: var(--muted-color);
+}`,
+        text: '<strong>Contrast = make things easy to see.</strong> WCAG asks for at least 4.5:1 contrast between normal text and its background, and 3:1 for large text. The small .meta and footer text uses --muted-color, a gray dark enough to pass on the light card background. Use the controls below to test other grays. Medium gray #767676 passes on white but fails on the light gray card.'
+      }
+    ];
+
+    const LAST = steps.length - 1;
+
+    const frame = document.getElementById('previewFrame');
+    const codeBox = document.getElementById('codeBox');
+    const codeLabel = document.getElementById('codeLabel');
+    const codeLegend = document.getElementById('codeLegend');
+    const explain = document.getElementById('explain');
+    const stepButtons = Array.from(document.querySelectorAll('.step-btn'));
+    const ideaButtons = Array.from(document.querySelectorAll('.idea'));
+    const status = document.getElementById('status');
+    const practiceSet = document.getElementById('practiceSet');
+    const practiceHint = document.getElementById('practiceHint');
+    const spacing = document.getElementById('spacingSelect');
+    const font = document.getElementById('fontSelect');
+    const layout = document.getElementById('layoutSelect');
+    const muted = document.getElementById('mutedSelect');
+    const contrastResult = document.getElementById('contrastResult');
+    const contrastSwatch = document.getElementById('contrastSwatch');
+    const contrastRatio = document.getElementById('contrastRatio');
+    const contrastVerdict = document.getElementById('contrastVerdict');
+    const resetBtn = document.getElementById('resetBtn');
+
+    let current = 0;
+
+    /* ---------- Contrast math (WCAG 2 relative luminance) ---------- */
+    function luminance(hex) {
+      const [r, g, b] = [1, 3, 5].map(i => {
+        const c = parseInt(hex.slice(i, i + 2), 16) / 255;
+        return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    }
+
+    function contrast(a, b) {
+      const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+      return (hi + 0.05) / (lo + 0.05);
+    }
+
+    /* ---------- CSS written by the practice controls ---------- */
+    function experimentCSS() {
+      if (current !== LAST) return '';
+      const rootProps = [];
+      if (spacing.value !== '1rem') rootProps.push('  --space: ' + spacing.value + ';');
+      if (muted.value !== '#555555') rootProps.push('  --muted-color: ' + muted.value + ';');
+
+      const blocks = [];
+      if (rootProps.length) blocks.push(':root {\n' + rootProps.join('\n') + '\n}');
+      if (font.value !== '100%') blocks.push('html {\n  font-size: ' + font.value + ';\n}');
+      if (layout.value === 'block') {
+        blocks.push('.card-container {\n  display: block;\n}\n\n.card {\n  margin-bottom: var(--space);\n}');
+      }
+      return blocks.length ? '/* Your experiments */\n' + blocks.join('\n\n') : '';
+    }
+
+    function cssThrough(index) {
+      return steps.slice(1, index + 1).map(s => s.css);
+    }
+
+    /* ---------- Preview: an isolated page that runs the shown CSS ---------- */
+    function renderPreview() {
+      const css = cssThrough(current).concat(experimentCSS()).filter(Boolean).join('\n\n');
+      frame.srcdoc =
+        '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">' +
+        '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+        '<title>My Web Page</title><style>' + css + '</style></head><body>' +
+        PAGE_BODY +
+        '<script>document.addEventListener("click",function(e){if(e.target.closest("a"))e.preventDefault();});<\/script>' +
+        '</body></html>';
+    }
+
+    frame.addEventListener('load', () => {
+      try {
+        const doc = frame.contentDocument;
+        const win = frame.contentWindow;
+        const fit = () => {
+          const body = doc.body;
+          const bottom = body.getBoundingClientRect().bottom +
+            parseFloat(win.getComputedStyle(body).marginBottom || 0);
+          frame.style.height = Math.max(200, Math.ceil(bottom)) + 'px';
+        };
+        fit();
+        new win.ResizeObserver(fit).observe(doc.body);
+      } catch (err) {
+        frame.style.height = '460px';
+      }
+    });
+
+    /* ---------- Code panel ---------- */
+    function renderCode() {
+      codeBox.replaceChildren();
+
+      if (current === 0) {
+        codeLabel.textContent = 'index.html';
+        codeBox.textContent = INDEX_HTML;
+        codeLegend.textContent = 'The <body> below is exactly what the preview displays.';
+        codeBox.scrollTop = 0;
+        return;
+      }
+
+      codeLabel.textContent = 'styles.css';
+      const parts = cssThrough(current).map((css, i, all) => ({
+        text: css,
+        cls: i === all.length - 1 ? 'new' : ''
+      }));
+      const exp = experimentCSS();
+      if (exp) parts.push({ text: exp, cls: 'experiment' });
+
+      let firstHighlight = null;
+      parts.forEach((part, i) => {
+        if (part.cls) {
+          const mark = document.createElement('mark');
+          if (part.cls === 'experiment') mark.className = 'experiment';
+          mark.textContent = part.text;
+          codeBox.appendChild(mark);
+          if (!firstHighlight) firstHighlight = mark;
+          if (i < parts.length - 1) codeBox.appendChild(document.createTextNode('\n'));
+        } else {
+          codeBox.appendChild(document.createTextNode(part.text + (i < parts.length - 1 ? '\n\n' : '')));
+        }
+      });
+
+      codeLegend.textContent = exp
+        ? 'Green lines are this step\'s code. Gold lines are the CSS your experiments wrote.'
+        : 'Green lines are new in this step. Add them below what you already have in styles.css.';
+
+      if (firstHighlight) codeBox.scrollTop = Math.max(0, firstHighlight.offsetTop - 16);
+    }
+
+    /* ---------- Contrast readout ---------- */
+    function renderContrast() {
+      const onLast = current === LAST;
+      contrastResult.hidden = !onLast;
+      if (!onLast) return '';
+      const ratio = contrast(muted.value, CARD_BG);
+      const passes = ratio >= 4.5;
+      contrastSwatch.style.color = muted.value;
+      contrastRatio.textContent = ratio.toFixed(2) + ':1';
+      contrastVerdict.textContent = passes ? 'Passes (4.5:1 needed)' : 'Fails (4.5:1 needed)';
+      contrastVerdict.className = 'verdict ' + (passes ? 'pass' : 'fail');
+      return 'Small text contrast is ' + ratio.toFixed(2) + ' to 1, which ' + (passes ? 'passes.' : 'fails.');
+    }
+
+    /* ---------- Main update ---------- */
+    function showStep(index) {
+      current = index;
+
+      stepButtons.forEach((button, i) => {
+        if (i === index) button.setAttribute('aria-current', 'step');
+        else button.removeAttribute('aria-current');
+      });
+
+      explain.innerHTML = steps[index].text;
+
+      const onLast = index === LAST;
+      practiceSet.disabled = !onLast;
+      practiceHint.textContent = onLast
+        ? 'Change the controls below. Each change writes real CSS, highlighted in gold in the code panel.'
+        : 'These controls unlock at Step 7. Each one writes real CSS, which appears in the code panel so you can see what changed.';
+
+      renderCode();
+      renderPreview();
+      renderContrast();
+
+      status.textContent = onLast
+        ? 'Step 7 of 7. Now experiment below.'
+        : 'Step ' + (index + 1) + ' of ' + steps.length + '. Notice what changed in the preview before moving on.';
+    }
+
+    function applyPractice() {
+      renderCode();
+      renderPreview();
+      const contrastMsg = renderContrast();
+      status.textContent = 'Preview updated. ' + contrastMsg;
+    }
+
+    stepButtons.forEach(button => {
+      button.addEventListener('click', () => showStep(Number(button.dataset.step)));
+    });
+
+    ideaButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const index = Number(button.dataset.step);
+        showStep(index);
+        stepButtons[index].focus();
+      });
+    });
+
+    [spacing, font, layout, muted].forEach(control => {
+      control.addEventListener('change', applyPractice);
+    });
+
+    resetBtn.addEventListener('click', () => {
+      spacing.value = '1rem';
+      font.value = '100%';
+      layout.value = 'flex';
+      muted.value = '#555555';
+      showStep(0);
+    });
+
+    showStep(0);
+  </script>
+</body>
+</html>
