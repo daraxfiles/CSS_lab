@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Starter Lab: 7 Core Skills</title>
+  <style>
+    :root {
+      --primary: #005580;
+      --text: #222222;
+      --muted: #666666;
+      --bg: #f7f7f7;
+      --panel: #ffffff;
+      --border: #d9d9d9;
+      --light: #f2f2f2;
+      --focus: #7a2e8e;
+      --success: #1b6e2a;
+      --danger: #a4261d;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .site-header {
+      background: var(--primary);
+      color: white;
+      padding: 1.25rem;
+    }
+
+    .site-header h1 {
+      margin: 0 0 .35rem;
+      font-size: 1.8rem;
+    }
+
+    .site-header p { margin: 0; }
+
+    main {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    .intro,
+    .panel,
+    .practice,
+    .summary {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(120px, 1fr));
+      gap: .5rem;
+      margin-bottom: 1rem;
+    }
+
+    button,
+    textarea {
+      font: inherit;
+    }
+
+    .step-btn,
+    .control-btn {
+      min-height: 44px;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 8px;
+      padding: .65rem .8rem;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    .step-btn:hover,
+    .control-btn:hover {
+      background: #f3f3f3;
+    }
+
+    .step-btn[aria-current="step"] {
+      border: 2px solid var(--primary);
+      background: #eef7fb;
+      font-weight: 700;
+    }
+
+    .step-btn:focus-visible,
+    .control-btn:focus-visible,
+    textarea:focus-visible,
+    pre:focus-visible,
+    iframe:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+      margin-bottom: .75rem;
+    }
+
+    .panel-head h2,
+    .panel-head h3 {
+      margin: 0;
+    }
+
+    .file-label,
+    .hint,
+    .status {
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    pre {
+      margin: 0;
+      background: #111;
+      color: #f8f8f2;
+      border-radius: 8px;
+      padding: 1rem;
+      overflow: auto;
+      min-height: 300px;
+      max-height: 460px;
+      white-space: pre-wrap;
+      font: .92rem/1.5 Consolas, Monaco, monospace;
+    }
+
+    .explain {
+      border-left: 4px solid var(--primary);
+      background: #f8fbfc;
+      padding: .9rem 1rem;
+      margin-top: .8rem;
+    }
+
+    .explain strong { color: var(--primary); }
+
+    .browser-shell {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: white;
+    }
+
+    .browser-bar {
+      background: #ececec;
+      padding: .55rem .75rem;
+      font-size: .85rem;
+      color: #555;
+      border-bottom: 1px solid var(--border);
+    }
+
+    #previewFrame {
+      display: block;
+      width: 100%;
+      height: 360px;
+      border: 0;
+      background: white;
+    }
+
+    .practice-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-bottom: .8rem;
+    }
+
+    .editor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 240px;
+      margin-top: .35rem;
+      resize: vertical;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .8rem;
+      font: .9rem/1.5 Consolas, Monaco, monospace;
+      background: white;
+      color: var(--text);
+    }
+
+    .challenge {
+      padding: .45rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .challenge:last-child {
+      border-bottom: 0;
+    }
+
+    .contrast-box {
+      display: flex;
+      gap: .75rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: .75rem;
+      padding: .75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .pass { color: var(--success); font-weight: 700; }
+    .fail { color: var(--danger); font-weight: 700; }
+
+    footer {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 0 1rem 1.25rem;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    @media (max-width: 1000px) {
+      .steps { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    @media (max-width: 820px) {
+      .workspace,
+      .editor-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 540px) {
+      .steps { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <h1>CSS Starter Lab</h1>
+    <p>Seven core skills: Connect CSS → Typography → Variables & Color → Spacing → Flexbox → Focus → Contrast</p>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>How to use this lab</h2>
+      <p>Work through the seven steps in order. Each step gives you a short explanation, code example, live preview, and a practice challenge. Use the practice editor to copy, paste, change, and test the code yourself.</p>
+    </section>
+
+    <nav class="steps" aria-label="CSS lesson steps">
+      <button type="button" class="step-btn" data-step="0">1. Connect CSS</button>
+      <button type="button" class="step-btn" data-step="1">2. Typography</button>
+      <button type="button" class="step-btn" data-step="2">3. Variables &amp; Color</button>
+      <button type="button" class="step-btn" data-step="3">4. Spacing</button>
+      <button type="button" class="step-btn" data-step="4">5. Flexbox</button>
+      <button type="button" class="step-btn" data-step="5">6. Focus</button>
+      <button type="button" class="step-btn" data-step="6">7. Contrast</button>
+    </nav>
+
+    <section class="workspace">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Code</h2>
+          <span id="codeLabel" class="file-label">index.html</span>
+        </div>
+        <pre id="codeBox" tabindex="0"></pre>
+        <div id="explain" class="explain" aria-live="polite"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Browser Preview</h2>
+          <span class="file-label">Save → Refresh → Observe</span>
+        </div>
+        <div class="browser-shell">
+          <div class="browser-bar">index.html</div>
+          <iframe id="previewFrame" title="CSS lesson preview"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <section class="practice">
+      <div class="panel-head">
+        <div>
+          <h2>Practice It Yourself</h2>
+          <p class="hint">Load the current example, change the code, then click Run Code.</p>
+        </div>
+        <div class="practice-actions">
+          <button id="loadBtn" class="control-btn" type="button">Load Example</button>
+          <button id="runBtn" class="control-btn" type="button">Run Code</button>
+          <button id="resetBtn" class="control-btn" type="button">Reset Practice</button>
+        </div>
+      </div>
+
+      <div class="editor-grid">
+        <label>
+          HTML
+          <textarea id="htmlEditor"></textarea>
+        </label>
+
+        <label>
+          CSS
+          <textarea id="cssEditor"></textarea>
+        </label>
+      </div>
+
+      <p id="status" class="status" aria-live="polite"></p>
+
+      <div id="contrastBox" class="contrast-box" hidden>
+        <span>Contrast ratio:</span>
+        <strong id="contrastRatio"></strong>
+        <span id="contrastVerdict"></span>
+      </div>
+    </section>
+
+    <section class="summary">
+      <h2>Try this challenge</h2>
+      <div id="challenge"></div>
+    </section>
+  </main>
+
+  <footer>
+    ETEC 52103 — Media and Web Design · CSS & Accessible Layout
+  </footer>
+
+  <script>
+    const PAGE_BODY = `
+<header>
+  <h1>Container Gardening Workshop</h1>
+  <p>Learn how to grow plants in small spaces.</p>
+  <a href="#register">Register now</a>
+</header>
+
+<main>
+  <section class="card-container">
+    <article class="card">
+      <h2>What you will learn</h2>
+      <p>Choose containers, soil, and plants for a successful small garden.</p>
+      <p class="meta">Saturday, 10 a.m. · Room B</p>
+    </article>
+
+    <article class="card">
+      <h2>Who should attend</h2>
+      <p>Beginning gardeners and anyone with limited outdoor space.</p>
+      <p class="meta">Free · No experience needed</p>
+    </article>
+  </section>
+</main>
+
+<footer>
+  <p>Public Library Learning Series · <a href="#events">More events</a></p>
+</footer>`;
+
+    const INDEX_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+  <title>My Web Page</title>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+${PAGE_BODY}
+</body>
+</html>`;
+
+    const steps = [
+      {
+        title: '1. Connect CSS',
+        file: 'index.html',
+        html: INDEX_HTML,
+        css: '',
+        explain: '<strong>Connect CSS = connect the styling file to the webpage.</strong> Create a file named styles.css, then add the link inside the &lt;head&gt;. If the filename is wrong, the styles will not load.',
+        challenge: 'Practice: change href="styles.css" to href="style.css". What would happen if your real file is still named styles.css?'
+      },
+      {
+        title: '2. Typography',
+        file: 'styles.css',
+        html: PAGE_BODY,
+        css: `body {
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 1.25rem;
+}`,
+        explain: '<strong>Typography = control how text looks and reads.</strong> font-family changes the typeface. rem gives text a relative size. line-height adds breathing room between lines.',
+        challenge: 'Practice: change h1 from 2.5rem to 3rem. Then change line-height from 1.6 to 1.2. Which version is easier to read?'
+      },
+      {
+        title: '3. Variables & Color',
+        file: 'styles.css',
+        html: PAGE_BODY,
+        css: `:root {
+  --primary-color: #005580;
+  --text-color: #222222;
+  --background-color: #ffffff;
+  --light-color: #f2f2f2;
+}
+
+body {
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
+header {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+header a {
+  color: white;
+}
+
+.card,
+footer {
+  background-color: var(--light-color);
+}`,
+        explain: '<strong>Variables = name reusable values.</strong> Instead of typing the same color again and again, give it a name in :root and reuse it with var(...). This makes colors easier to manage.',
+        challenge: 'Practice: change --primary-color to #7a1f3d. Run the code. Notice every place using var(--primary-color) updates automatically.'
+      },
+      {
+        title: '4. Spacing',
+        file: 'styles.css',
+        html: PAGE_BODY,
+        css: `:root {
+  --space: 1rem;
+}
+
+body {
+  margin: 0;
+}
+
+header,
+footer {
+  padding: var(--space);
+}
+
+main {
+  padding: 2rem;
+}
+
+.card {
+  padding: var(--space);
+  margin-bottom: var(--space);
+}
+
+h1,
+h2 {
+  margin-top: 0;
+}`,
+        explain: '<strong>Spacing = give content breathing room.</strong> Padding is space inside an element. Margin is space outside an element. Good spacing helps users understand which content belongs together.',
+        challenge: 'Practice: change --space from 1rem to 2rem. Then try padding: 0 on .card. Compare the two versions.'
+      },
+      {
+        title: '5. Flexbox',
+        file: 'styles.css',
+        html: PAGE_BODY,
+        css: `.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.card {
+  flex: 1 1 180px;
+  padding: 1rem;
+  border: 1px solid #cccccc;
+}`,
+        explain: '<strong>Flexbox = arrange things.</strong> Put display: flex on the parent. Its direct children can sit next to each other. gap adds space, and flex-wrap lets items move to another line when space becomes smaller.',
+        challenge: 'Practice: remove display: flex. Run the code. Then put it back and change gap from 1rem to 3rem.'
+      },
+      {
+        title: '6. Focus',
+        file: 'styles.css',
+        html: PAGE_BODY,
+        css: `a {
+  color: #005580;
+}
+
+a:focus-visible {
+  outline: 0.2rem solid #000000;
+  outline-offset: 0.2rem;
+}
+
+header {
+  background: #005580;
+  color: white;
+  padding: 1rem;
+}
+
+header a {
+  color: white;
+}
+
+header a:focus-visible {
+  outline-color: white;
+}`,
+        explain: '<strong>Focus = show where the keyboard is.</strong> People can move through links and buttons with the Tab key. :focus-visible gives the current item a visible outline so users know where they are.',
+        challenge: 'Practice: click inside the preview and press Tab. Then delete the focus-visible rule and try again. What information disappears?'
+      },
+      {
+        title: '7. Contrast',
+        file: 'styles.css',
+        html: PAGE_BODY,
+        css: `:root {
+  --text-color: #222222;
+  --muted-color: #555555;
+  --card-background: #f2f2f2;
+}
+
+body {
+  color: var(--text-color);
+}
+
+.card,
+footer {
+  background: var(--card-background);
+}
+
+.meta,
+footer {
+  color: var(--muted-color);
+}`,
+        explain: '<strong>Contrast = make text easy to see.</strong> Normal text should have at least 4.5:1 contrast with its background. Large text should have at least 3:1. Light gray text on a light background can be difficult to read.',
+        challenge: 'Practice: change --muted-color from #555555 to #aaaaaa. Run the code and compare the readability.'
+      }
+    ];
+
+    const codeBox = document.getElementById('codeBox');
+    const codeLabel = document.getElementById('codeLabel');
+    const explain = document.getElementById('explain');
+    const frame = document.getElementById('previewFrame');
+    const htmlEditor = document.getElementById('htmlEditor');
+    const cssEditor = document.getElementById('cssEditor');
+    const status = document.getElementById('status');
+    const challenge = document.getElementById('challenge');
+    const stepButtons = Array.from(document.querySelectorAll('.step-btn'));
+    const contrastBox = document.getElementById('contrastBox');
+    const contrastRatio = document.getElementById('contrastRatio');
+    const contrastVerdict = document.getElementById('contrastVerdict');
+
+    let current = 0;
+
+    function previewDoc(html, css) {
+      return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body { font-family: Arial, sans-serif; padding: 1rem; }
+${css}
+</style>
+</head>
+<body>
+${html}
+<script>
+document.addEventListener('click', function(e) {
+  if (e.target.closest('a')) e.preventDefault();
+});
+<\/script>
+</body>
+</html>`;
+    }
+
+    function luminance(hex) {
+      const values = [1, 3, 5].map(i => {
+        const c = parseInt(hex.slice(i, i + 2), 16) / 255;
+        return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * values[0] + 0.7152 * values[1] + 0.0722 * values[2];
+    }
+
+    function contrast(a, b) {
+      const L1 = luminance(a);
+      const L2 = luminance(b);
+      const hi = Math.max(L1, L2);
+      const lo = Math.min(L1, L2);
+      return (hi + 0.05) / (lo + 0.05);
+    }
+
+    function renderContrast() {
+      if (current !== 6) {
+        contrastBox.hidden = true;
+        return;
+      }
+
+      const colorMatch = cssEditor.value.match(/--muted-color:\s*(#[0-9a-fA-F]{6})/);
+      const bgMatch = cssEditor.value.match(/--card-background:\s*(#[0-9a-fA-F]{6})/);
+
+      if (!colorMatch || !bgMatch) {
+        contrastBox.hidden = true;
+        return;
+      }
+
+      const ratio = contrast(colorMatch[1], bgMatch[1]);
+      contrastBox.hidden = false;
+      contrastRatio.textContent = ratio.toFixed(2) + ':1';
+
+      const passes = ratio >= 4.5;
+      contrastVerdict.textContent = passes ? 'Passes normal-text requirement' : 'Does not pass normal-text requirement';
+      contrastVerdict.className = passes ? 'pass' : 'fail';
+    }
+
+    function showStep(index) {
+      current = index;
+      const step = steps[index];
+
+      stepButtons.forEach((button, i) => {
+        if (i === index) button.setAttribute('aria-current', 'step');
+        else button.removeAttribute('aria-current');
+      });
+
+      codeLabel.textContent = step.file;
+      codeBox.textContent = step.file === 'index.html' ? step.html : step.css;
+      explain.innerHTML = step.explain;
+      challenge.textContent = step.challenge;
+
+      frame.srcdoc = previewDoc(step.html === INDEX_HTML ? PAGE_BODY : step.html, step.css);
+
+      htmlEditor.value = step.html === INDEX_HTML ? PAGE_BODY : step.html;
+      cssEditor.value = step.css;
+
+      status.textContent = 'Example loaded. Change the code, then click Run Code.';
+      renderContrast();
+    }
+
+    function runPractice() {
+      frame.srcdoc = previewDoc(htmlEditor.value, cssEditor.value);
+      status.textContent = 'Code updated. Compare the preview with your changes.';
+      renderContrast();
+    }
+
+    stepButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        showStep(Number(button.dataset.step));
+      });
+    });
+
+    document.getElementById('loadBtn').addEventListener('click', () => {
+      const step = steps[current];
+      htmlEditor.value = step.html === INDEX_HTML ? PAGE_BODY : step.html;
+      cssEditor.value = step.css;
+      runPractice();
+    });
+
+    document.getElementById('runBtn').addEventListener('click', runPractice);
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      htmlEditor.value = '';
+      cssEditor.value = '';
+      frame.srcdoc = '';
+      status.textContent = 'Practice area cleared.';
+      contrastBox.hidden = true;
+    });
+
+    showStep(0);
+  </script>
+</body>
+</html>
